@@ -48,15 +48,11 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const userRecord = await auth.createUser({
+    await auth.createUser({
       email: username,
       password: password,
     });
 
-    const userDoc = await User.create({
-      username: userRecord.email,
-      firebaseid:userRecord.uid
-    });
 
     res.json(userDoc);
   } catch (error) {
