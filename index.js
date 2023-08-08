@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
 
     const userDoc = await User.create({
       username: userRecord.email,
-      firebaseUid: userRecord.uid,
+      firebaseid:userRecord.uid
     });
 
     res.json(userDoc);
