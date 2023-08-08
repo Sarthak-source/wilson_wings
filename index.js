@@ -48,13 +48,12 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    await auth.createUser({
+    const userRecord = await auth.createUser({
       email: username,
       password: password,
     });
 
-
-    res.json(userDoc);
+    res.json(userRecord);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'Registration failed', error });
