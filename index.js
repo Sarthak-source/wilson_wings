@@ -65,10 +65,11 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
+    const userRecord = await admin.auth().getUserByEmail(username);
     const userCredential = await auth.signInWithEmailAndPassword(username, password);
-    const customToken = await auth.createCustomToken(userCredential.user.uid);
+    const customToken = await auth.createCustomToken(userRecord.uid);
 
-    res.cookie('token', customToken).json({
+    res.status(200).json({
       uid: userCredential.user.uid,
       email: userCredential.user.email,
       token: customToken,
