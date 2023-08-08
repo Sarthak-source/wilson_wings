@@ -65,19 +65,19 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-   
-    const userRecord =await auth.signInWithEmailAndPassword(username, password);
-    console.log(userRecord)
-    const customToken = await auth.createCustomToken(userRecord.uid);
+    const userCredential = await auth.signInWithEmailAndPassword(username, password);
+    const customToken = await auth.createCustomToken(userCredential.user.uid);
+
     res.cookie('token', customToken).json({
-      uid: userRecord.uid,
-      email: userRecord.email,
+      uid: userCredential.user.uid,
+      email: userCredential.user.email,
       token: customToken,
     });
   } catch (error) {
     res.status(400).json({ message: 'Wrong credentials or user not found', error });
   }
 });
+
 
 app.get('/profile', (req, res) => {
   const token = req.header('Authorization').split(' ')[1];
