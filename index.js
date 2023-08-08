@@ -66,7 +66,7 @@ app.post('/login', async (req, res) => {
   console.log(username)
   console.log(password)
 
-  // try {
+  try {
     const userRecord = await admin.auth().getUserByEmail(username);
     const userCredential = await auth.signInWithEmailAndPassword(username, password);
     const customToken = await auth.createCustomToken(userRecord.uid);
@@ -80,9 +80,9 @@ app.post('/login', async (req, res) => {
       token: customToken,
     });
     console.log(res)
-  // } catch (error) {
-  //   res.status(400).json({ message: 'Wrong credentials or user not found', error });
-  // }
+  } catch (error) {
+    res.status(400).json({ message: 'Wrong credentials or user not found', error });
+  }
 });
 
 
