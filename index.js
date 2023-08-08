@@ -12,9 +12,6 @@ const uploadMiddleware = multer({ storage: multer.memoryStorage() });
 const admin = require('firebase-admin');
 require('dotenv').config();
 
-//DVhKEkhQEz51xsBr
-
-
 const serviceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
@@ -29,11 +26,10 @@ admin.initializeApp({
 const auth = admin.auth();
 
 const bucket = admin.storage().bucket();
-const salt = bcrypt.genSaltSync(10);
 const secret = process.env.JWT_SECRET;
 
 app.use(cors({
-  origin: process.env.ORIGIN_URL,
+  origin: '',
   credentials: true,
   optionsSuccessStatus: 200
 }));
