@@ -29,8 +29,6 @@ admin.initializeApp({
   databaseURL:process.env.FIREBASE_REALTIME_DATABASE_URL
 });
 
-const auth = admin.auth();
-
 const bucket = admin.storage().bucket();
 const secret = process.env.JWT_SECRET;
 
@@ -54,7 +52,7 @@ app.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const userRecord = await auth.createUser({
+    const userRecord = await admin.auth().createUser({
       email: username,
       password: password,
     });
@@ -76,13 +74,13 @@ app.post('/login', async (req, res) => {
   
   try {
     // Find user by email (username)
-    const userRecord = await auth.getUserByEmail(username);
+    const userRecord = await admin.auth().getUserByEmail(username);
     
     // Authenticate user using email and password
-    const userCredential = await auth.signInWithEmailAndPassword(username, password);
+    const userCredential = await admin.auth().signInWithEmailAndPassword(username, password);
     
     // Create a custom token for the authenticated user
-    const customToken = await auth.createCustomToken(userRecord.uid);
+    const customToken = await admin.auth().createCustomToken(userRecord.uid);
     
     // Send the response
     res.status(200).json({
