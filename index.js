@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
     });
     console.log(res)
   } catch (error) {
-    res.status(400).json({ message: 'Wrong credentials or user not found', error });
+    res.status(400).json({ message: 'Login failed, try again', error });
   }
 });
 
