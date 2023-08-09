@@ -68,21 +68,29 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
+  
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password are required." });
+  }
+  
   try {
-    const userRecord = await admin.auth().getUserByEmail(username);
+    // Find user by email (username)
+    const userRecord = await auth.getUserByEmail(username);
+    
+    // Authenticate user using email and password
     const userCredential = await auth.signInWithEmailAndPassword(username, password);
+    
+    // Create a custom token for the authenticated user
     const customToken = await auth.createCustomToken(userRecord.uid);
-    console.log(userRecord);
-    console.log(userCredential);
-    console.log(customToken);
-
+    
+    // Send the response
     res.status(200).json({
       uid: userCredential.user.uid,
       email: userCredential.user.email,
       token: customToken,
     });
-    console.log(res)
   } catch (error) {
+    console.error("Login error:", error);
     res.status(400).json({ message: 'Login failed, try again', error });
   }
 });
