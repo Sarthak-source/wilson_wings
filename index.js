@@ -1,9 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require("mongoose");
-const User = require('./models/User');
 const Post = require('./models/Post');
-const bcrypt = require('bcryptjs');
 const app = express();
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -60,25 +58,11 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.get('/profile', (req, res) => {
-  const token = req.header('Authorization').split(' ')[1];
-  jwt.verify(token, secret, {}, (err, info) => {
-    if (err) throw err;
-    res.json(info);
-  });
-});
-
-app.post('/logout', async (req, res) => {
-  try {
-    res.clearCookie('token').json('Logged out successfully');
-  } catch (error) {
-    res.status(500).json({ message: 'An error occurred', error });
-  }
-});
 
 app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
   const { originalname } = req.file;
   const { title, summary, content } = req.body;
+  console.log('post-----',req.body)
 
   const fileUpload = bucket
     .file(`blog_covers/` + originalname);
