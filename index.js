@@ -18,10 +18,6 @@ const serviceAccount = {
   privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
 };
 
-console.log(process.env.FIREBASE_PROJECT_ID)
-console.log(process.env.FIREBASE_CLIENT_EMAIL)
-console.log(process.env.FIREBASE_PRIVATE_KEY)
-
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -63,37 +59,6 @@ app.post('/register', async (req, res) => {
     res.status(400).json({ message: 'Registration failed', error });
   }
 });
-
-
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-  
-  if (!username || !password) {
-    return res.status(400).json({ error: "Username and password are required." });
-  }
-  
-  try {
-    // Find user by email (username)
-    const userRecord = await admin.auth().getUserByEmail(username);
-    
-    // Authenticate user using email and password
-    const userCredential = await admin.auth().signInWithEmailAndPassword(username, password);
-    
-    // Create a custom token for the authenticated user
-    const customToken = await admin.auth().createCustomToken(userRecord.uid);
-    
-    // Send the response
-    res.status(200).json({
-      uid: userCredential.user.uid,
-      email: userCredential.user.email,
-      token: customToken,
-    });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(400).json({ message: 'Login failed, try again', error });
-  }
-});
-
 
 app.get('/profile', (req, res) => {
   const token = req.header('Authorization').split(' ')[1];
