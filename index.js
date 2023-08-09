@@ -26,6 +26,7 @@ console.log(process.env.FIREBASE_PRIVATE_KEY)
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: process.env.FIREBASE_BUCKET,
+  databaseURL:process.env.FIREBASE_REALTIME_DATABASE_URL
 });
 
 const auth = admin.auth();
