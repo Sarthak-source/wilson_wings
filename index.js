@@ -18,6 +18,11 @@ const serviceAccount = {
   privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
 };
 
+console.log(process.env.FIREBASE_PROJECT_ID)
+console.log(process.env.FIREBASE_CLIENT_EMAIL)
+console.log(process.env.FIREBASE_PRIVATE_KEY)
+
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: process.env.FIREBASE_BUCKET,
@@ -63,9 +68,6 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
-  console.log(username)
-  console.log(password)
-
   try {
     const userRecord = await admin.auth().getUserByEmail(username);
     const userCredential = await auth.signInWithEmailAndPassword(username, password);
